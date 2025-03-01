@@ -65,7 +65,7 @@ def send_text_email(to_number, carrier, message):
     email = os.getenv('ALERT_EMAIL')
     password = os.getenv('ALERT_PASSWORD')
     recipient = f"{to_number}{carrier_gateways[carrier]}"
-    full_message = f"DoseAlert\n{message}"
+    full_message = f"Subject: DoseAlert\n\n{message}"
     
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
         server.login(email, password)
@@ -91,7 +91,7 @@ def check_old_prescriptions():
                 description = f"Reminder: Your prescription '{prescription.description}' from {prescription.date} needs renewal!"
                 
                 send_text_email(
-                    to_number=phone_number,
+                    to_number=phone_number[1:],
                     carrier=user.carrier,
                     message= description
                 )
