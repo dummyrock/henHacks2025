@@ -1,5 +1,42 @@
-<div >
-    <div class="header">
-        <div class="title">healthProject Example</div>
+<div id="welcome-banner">
+    <div id="title banner">
+        Welcome to DoseAlert: <p>The One Stop Shop For All Your Medical Needs</p>
     </div>
+    <div id="enterButtons">
+        <button id="login" onClick="">Login</button>
+        <button id="signUp">Sign up</button>
+    </div>
+</div>
+
+<div id ="returning-user">
+<form action="/user_homepage.html">
+    <label for="UserID">Username:</label>
+    <input type="text" id="UserID" name="username" placeholder="Username" required>
+  
+    <label for="KeyID">Password:</label>
+    <input type="password" id="KeyID" name="passwrd" placeholder="Password" required>
+    
+    <input type="submit" value="Submit">
+  </form>
+</div>
+
+<div id="new-user">
+  <form action="/newUser_info.php">
+    <label for="UserID">Username:</label>
+    <input type="text" id="UserID" name="username" placeholder="Username" required>
+  
+    <label for="KeyID">Password:</label>
+    <input type="text" id="KeyID" name="password" placeholder="Password" required>
+
+    <label for="KeyID">Re-Enter Password:</label>
+    <input type="text" id="KeyID" name="password" placeholder="Password" required>
+
+    <label for="Email">Enter Email:</label>
+    <input type="text" id="Email" name="email" placeholder="Email" required>
+
+    <label for="PhoneID">Enter Phone Number:</label>
+    <input type="text" id="PhoneID" name="phone-number" placeholder="Phone Number" required>
+    
+    <input type="submit" value="Submit">
+  </form>
 </div>
