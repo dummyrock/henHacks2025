@@ -1,6 +1,6 @@
 import html from "./main.component.html";
 import css from "./main.component.css";
-import { EzComponent } from '@gsilber/webez';
+import { EzComponent, Click, EventSubject, BindCSSClass, BindValue } from '@gsilber/webez';
 
 /**
  * @description MainComponent is the main component of the app
@@ -8,8 +8,13 @@ import { EzComponent } from '@gsilber/webez';
  * 
  */
 export class MainComponent extends EzComponent {
-
+    
     constructor() {
         super(html, css);
+    }
+
+    @Click("signUp")
+    signUpDropdown(){
+        
     }
 }
