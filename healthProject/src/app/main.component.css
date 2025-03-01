@@ -39,13 +39,6 @@
 	padding: 30px;
 }
 
-#returning-user{
-	display:on
-}
-#new-user{
-	display:on;
-}
-
 input[type=text], input[type=password] {
 	width: 100%;
 	padding: 12px 20px;
