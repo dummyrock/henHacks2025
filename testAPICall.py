@@ -6,11 +6,14 @@ BASE_URL = "http://localhost:8000"
 API_KEY = "secret-key-123"
 HEADERS = {"X-API-Key": API_KEY}
 
-def create_user(username: str, height: int, weight: int):
+def create_user(username: str, email: str, phone_number: str, carrier: str, height: int, weight: int):
     """Create a new user through the API"""
     url = f"{BASE_URL}/users/"
     user_data = {
         "username": username,
+        "email": email,
+        "phone_number": phone_number,
+        "carrier": carrier,
         "height": height,
         "weight": weight
     }
@@ -44,6 +47,9 @@ if __name__ == "__main__":
     # Create user
     new_user = create_user(
         username="jack_doe",
+        email='dfrajerman@gmail.com',
+        phone_number='+14434017911',
+        carrier='verizon',
         height=175,
         weight=70
     )

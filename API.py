@@ -1,7 +1,11 @@
 from datetime import date, timedelta
 from enum import Enum
 from typing import List, Optional
-from pydantic import EmailStr, field_validator
+from pydantic import EmailStr, field_validator, Field
+import smtplib
+import os
+from dotenv import load_dotenv
+from pathlib import Path
 
 from fastapi.security import APIKeyHeader
 from fastapi import Depends, FastAPI, HTTPException, status, Security
@@ -11,9 +15,18 @@ from sqlalchemy.orm import Session, declarative_base, relationship, sessionmaker
 from apscheduler.schedulers.background import BackgroundScheduler
 from contextlib import asynccontextmanager
 
+load_dotenv()
+
 # Add near the top with other constants
 API_KEY_NAME = "X-API-Key"
 API_KEY = "secret-key-123"  # Change this to a secure key in production
+
+carrier_gateways = {
+    'att': '@txt.att.net',
+    'tmobile': '@tmomail.net',
+    'verizon': '@vtext.com',
+    'sprint': '@messaging.sprintpcs.com'
+}
 
 # Add API key security scheme
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
@@ -48,6 +61,16 @@ Base = declarative_base()
 
 app = FastAPI(lifespan=lifespan,dependencies=[Security(api_key_auth)])
 
+def send_text_email(to_number, carrier, message):
+    email = os.getenv('ALERT_EMAIL')
+    password = os.getenv('ALERT_PASSWORD')
+    recipient = f"{to_number}{carrier_gateways[carrier]}"
+    full_message = f"DoseAlert\n{message}"
+    
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+        server.login(email, password)
+        server.sendmail(email, recipient, full_message)
+
 # Add this new function
 def check_old_prescriptions():
     with SessionLocal() as db:
@@ -61,11 +84,23 @@ def check_old_prescriptions():
         if old_prescriptions:
             print("\n=== Old prescriptions found ===")
             for prescription in old_prescriptions:
+                user = prescription.user
+                
+                phone_number = ''.join(filter(str.isdigit, user.phone_number))
+                
+                description = f"Reminder: Your prescription '{prescription.description}' from {prescription.date} needs renewal!"
+                
+                send_text_email(
+                    to_number=phone_number,
+                    carrier=user.carrier,
+                    message= description
+                )
                 print(f"Prescription ID: {prescription.id}")
                 print(f"User ID: {prescription.user_id}")
                 print(f"Date: {prescription.date}")
                 print(f"Description: {prescription.description}")
                 print("----------------------------")
+
         else:
             print("\nNo old prescriptions found")
 
@@ -77,6 +112,7 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     email = Column(String) #in all forms of email
     phone_number = Column(String) # in (- - -) - - -  - - - -
+    carrier = Column(String)
     height = Column(Integer)  # in cm
     weight = Column(Integer)  # in kg
 
@@ -96,7 +132,7 @@ class HealthEntry(Base):
     doctor_info = Column(String)
     user_id = Column(Integer, ForeignKey("users.id"))
 
-    user = relationship("User", back_populates="health_entries")
+    user = relationship("User", back_populates="health_entries", lazy='joined')
 
 Base.metadata.create_all(bind=engine)
 
@@ -116,7 +152,8 @@ class HealthEntryResponse(HealthEntryCreate):
 class UserCreate(BaseModel):
     username: str
     email: EmailStr
-    phone_number: str
+    phone_number: str = Field(..., pattern=r"^\+?1?\d{9,15}$")  # Phone number validation
+    carrier: str
     height: int
     weight: int
     
