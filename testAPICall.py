@@ -44,34 +44,67 @@ def create_health_entry(user_id: int, entry_data: dict):
         return None
 
 if __name__ == "__main__":
-    # Create user
-    new_user = create_user(
-        username="jack_doe",
-        email='dfrajerman@gmail.com',
-        phone_number='+14434017911',
-        carrier='verizon',
-        height=175,
-        weight=70
-    )
-    
-    if new_user:
-        print("Successfully created user:")
-        print(json.dumps(new_user, indent=2))
+    while True:
+        val = input("Welcome to api interface:\n1) Add New User\n2) Add Health Entry to User\n3) End\n")
+        if val == '1':
+            use = input("user's name: ")
+            ema = input("email: ")
+            phone = input("phone number: ")
+            car = input("carrier(because we are sending through email): ")
+            hei = input("height(cm): ")
+            wei = input('weight(kg): ')
+            
+            new_user = create_user(
+                username=use,
+                email=ema,
+                phone_number="+1" + phone,
+                carrier=car,
+                height=hei,
+                weight=wei
+            )
+            if new_user:
+                print("Successfully created user:")
+                print(json.dumps(new_user, indent=2))
+            else:
+                print("Failed to create user")
+        elif val == '2':
+            user = input("user's name: ")
+            
+            try:
+                users_response = requests.get(f"{BASE_URL}/users/", headers=HEADERS)
+                users_response.raise_for_status()
+                users = users_response.json()
+            except Exception as e:
+                print(f"Error fetching users: {e}")
+                continue
+            
+            user = next((u for u in users if u["username"] == username), None)
+            if not user:
+                print(f"User {username} not found!")
+                continue
+                
+            user_id = user["id"]
+            
+            entry_type = input("entry type(prescription/appointment): ")
+            description = input('description:')
+            doctor_info = input('Doctor Info:')
+            
+            vaccine_entry = {
+                "date": str(date.today()),  # Current date
+                "entry_type": entry_type,
+                "description": description,
+                "doctor_info": doctor_info
+            }
+            
+            health_entry = create_health_entry(user_id, vaccine_entry)
         
-        # Create health entry for the vaccine
-        vaccine_entry = {
-            "date": str(date.today()),  # Current date
-            "entry_type": "prescription",
-            "description": "COVID-19 booster shot",
-            "doctor_info": "Dr. Sarah Miller, City Vaccination Center"
-        }
+            if health_entry:
+                print("\nSuccessfully added health entry:")
+                print(json.dumps(health_entry, indent=2))
+            else:
+                print("\nFailed to add health entry")
         
-        health_entry = create_health_entry(new_user["id"], vaccine_entry)
-        
-        if health_entry:
-            print("\nSuccessfully added health entry:")
-            print(json.dumps(health_entry, indent=2))
+        elif val == "3":
+            break
         else:
-            print("\nFailed to add health entry")
-    else:
-        print("Failed to create user")
+            print('not 1, 2, or 3')
