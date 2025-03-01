@@ -1,0 +1,9 @@
+import { EzComponent } from "@gsilber/webez";
+import html from "./user_home.component.html";
+import css from "./user_home.component.css";
+
+export class User_homeComponent extends EzComponent {
+    constructor() {
+        super(html, css);
+    }
+}
