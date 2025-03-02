@@ -31,15 +31,15 @@ def create_user(username: str,password:str, email: str, phone_number: str, carri
         return None
 
 def create_health_entry(user_id: int, entry_data: dict):
-    """Create a health entry for a user"""
+    """Create a health entry for a user using FastAPI endpoint"""
     url = f"{BASE_URL}/users/{user_id}/health-entries/"
     try:
         response = requests.post(url, json=entry_data, headers=HEADERS)
         response.raise_for_status()
-        return response.json()
+        return response.json()  # Return the created entry from FastAPI response
     except requests.exceptions.RequestException as e:
         print(f"Error creating health entry: {e}")
-        if response:
+        if response is not None:
             print(f"Status code: {response.status_code}")
             print(f"Response: {response.text}")
         return None
@@ -71,41 +71,47 @@ if __name__ == "__main__":
             else:
                 print("Failed to create user")
         elif val == '2':
-            user = input("user's name: ")
-            
+            username = input("User's name: ")
+
             try:
+                # Fetch users from API
                 users_response = requests.get(f"{BASE_URL}/users/", headers=HEADERS)
                 users_response.raise_for_status()
                 users = users_response.json()
             except Exception as e:
                 print(f"Error fetching users: {e}")
                 continue
-            
+
+            # Find the user by username
             user = next((u for u in users if u["username"] == username), None)
             if not user:
                 print(f"User {username} not found!")
                 continue
-                
+
+            # Get user ID
             user_id = user["id"]
-            
-            entry_type = input("entry type(prescription/appointment): ")
-            description = input('description:')
-            doctor_info = input('Doctor Info:')
-            
-            vaccine_entry = {
+
+            # Get health entry details
+            entry_type = input("Entry type (prescription/appointment): ")
+            description = input("Description: ")
+            doctor_info = input("Doctor Info: ")
+
+            # Create health entry data
+            health_entry_data = {
                 "date": str(date.today()),  # Current date
                 "entry_type": entry_type,
                 "description": description,
                 "doctor_info": doctor_info
             }
-            
-            health_entry = create_health_entry(user_id, vaccine_entry)
-        
+
+            # Call the function to create health entry
+            health_entry = create_health_entry(user_id, health_entry_data)
+
             if health_entry:
                 print("\nSuccessfully added health entry:")
                 print(json.dumps(health_entry, indent=2))
             else:
-                print("\nFailed to add health entry")
+                print("\nFailed to add health entry.")
         
         elif val == "3":
             break

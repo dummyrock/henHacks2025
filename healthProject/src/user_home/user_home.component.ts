@@ -82,8 +82,7 @@ export class UserHomepageComponent extends EzComponent {
 
     async setHealthData() {
         try {
-            this.userInfo = await getUser(this.userID);
-            this.initData();
+            console.log(await getHealthEntries(this.userID));
         } catch (error) {
             console.error("Error fetching user data:", error);
         }
@@ -104,6 +103,7 @@ export class UserHomepageComponent extends EzComponent {
     public setUserID(userID:number){
         this.userID = userID;
         this.setUserData();
+        this.setHealthData();
     }
 
     @Click("add-diagnoses")
