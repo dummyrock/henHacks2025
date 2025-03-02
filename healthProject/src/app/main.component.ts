@@ -58,7 +58,6 @@ export class MainComponent extends EzComponent {
 
     constructor() {
         super(html, css);
-        this.addComponent(this.userHomepage, "user-homepage");
         this.removeLogin();
         this.removeSignup();
     }
@@ -79,6 +78,7 @@ export class MainComponent extends EzComponent {
             this.userData = this.login.sendUserID();
             this.removeComponent(this.login);
             this.userID = await createUser(this.userData);
+            this.addComponent(this.userHomepage, "user-homepage");
         });
     }
     private removeSignup() {

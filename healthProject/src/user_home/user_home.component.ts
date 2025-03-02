@@ -26,8 +26,6 @@ export class UserHomepageComponent extends EzComponent {
     @BindStyle("notifications", "display")
     public notifcationDisplay: string = "none"
 
-
-
     constructor() {
         super(html, css);
     }
