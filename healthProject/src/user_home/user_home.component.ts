@@ -4,6 +4,7 @@ import css from "./user_home.component.css";
 import { DiagnosesComponent } from "../Diagnoses/Diagnoses.component";
 import { PerscriptionsComponent } from "../Perscriptions/Perscriptions.component";
 import { SymptomsComponent } from "../Symptoms/Symptoms.component";
+import { NotificationComponent } from "../notification/notification.component";
 import axios from "axios";
 
 interface User {
@@ -15,6 +16,13 @@ interface User {
     height: number
     weight: number
   }
+
+interface Health {
+    date:string
+    entry_type:string
+    description:string
+    doctor_info:string
+}
 
 async function getUser(userId: number) {
     const response = await axios.get(`http://128.4.102.9:8000/users/${userId}`,{
@@ -82,7 +90,18 @@ export class UserHomepageComponent extends EzComponent {
 
     async setHealthData() {
         try {
-            console.log(await getHealthEntries(this.userID));
+            const healthEntries = await getHealthEntries(this.userID);
+
+            for (const entry of healthEntries) {
+                const data:Health = entry;
+                const notifs: NotificationComponent = new NotificationComponent(data.date,data.entry_type,data.description,data.doctor_info);
+                if (data.entry_type =='appointment'){
+                    this.addComponent(notifs, "appointments");
+                }
+                else if(data.entry_type =="prescription"){
+                    this.addComponent(notifs,"perscription-reminders");
+                }
+            }
         } catch (error) {
             console.error("Error fetching user data:", error);
         }

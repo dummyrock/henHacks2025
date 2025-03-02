@@ -1,0 +1,6 @@
+#notification-item{
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    margin: 0 auto;
+}
