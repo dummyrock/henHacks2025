@@ -6,11 +6,12 @@ BASE_URL = "http://localhost:8000"
 API_KEY = "secret-key-123"
 HEADERS = {"X-API-Key": API_KEY}
 
-def create_user(username: str, email: str, phone_number: str, carrier: str, height: int, weight: int):
+def create_user(username: str,password:str, email: str, phone_number: str, carrier: str, height: int, weight: int):
     """Create a new user through the API"""
     url = f"{BASE_URL}/users/"
     user_data = {
         "username": username,
+        'password': password,
         "email": email,
         "phone_number": phone_number,
         "carrier": carrier,
@@ -47,7 +48,8 @@ if __name__ == "__main__":
     while True:
         val = input("Welcome to api interface:\n1) Add New User\n2) Add Health Entry to User\n3) End\n")
         if val == '1':
-            use = input("user's name: ")
+            use = input("username: ")
+            pwd = input('password: ')
             ema = input("email: ")
             phone = input("phone number: ")
             car = input("carrier(because we are sending through email): ")
@@ -56,6 +58,7 @@ if __name__ == "__main__":
             
             new_user = create_user(
                 username=use,
+                password=pwd,
                 email=ema,
                 phone_number="+1" + phone,
                 carrier=car,
