@@ -1,0 +1,33 @@
+#patient-tab{
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 19px;
+    background-color: rgb(163, 224, 255);
+}
+
+#provider-tab{
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 19px;
+    background-color: rgb(181, 252, 208);
+}
+
+#health-tab{
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 19px;
+    background-color:rgb(228, 189, 254)
+}
+
+#notifications-tab{
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 19px;
+    background-color: rgb(255, 180, 180);
+}
+
+#tabs{
+    margin-left: 90px;
+    padding: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
