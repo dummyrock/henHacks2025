@@ -79,6 +79,7 @@ export class MainComponent extends EzComponent {
             this.removeComponent(this.login);
             this.userID = await createUser(this.userData);
             this.addComponent(this.userHomepage, "user-homepage");
+            this.userHomepage.setUserID(this.userID);
         });
     }
     private removeSignup() {

@@ -1,9 +1,46 @@
-import { EzComponent, Click, BindValue, Change, ValueEvent, BindStyle } from "@gsilber/webez";
+import { EzComponent, Click, BindValue, Change, ValueEvent, BindStyle, BindValueToNumber } from "@gsilber/webez";
 import html from "./user_home.component.html";
 import css from "./user_home.component.css";
 import { DiagnosesComponent } from "../Diagnoses/Diagnoses.component";
 import { PerscriptionsComponent } from "../Perscriptions/Perscriptions.component";
 import { SymptomsComponent } from "../Symptoms/Symptoms.component";
+import { NotificationComponent } from "../notification/notification.component";
+import axios from "axios";
+
+interface User {
+    username: string
+    password: string
+    email: string
+    phone_number: string
+    carrier: string
+    height: number
+    weight: number
+  }
+
+interface Health {
+    date:string
+    entry_type:string
+    description:string
+    doctor_info:string
+}
+
+async function getUser(userId: number) {
+    const response = await axios.get(`http://128.4.102.9:8000/users/${userId}`,{
+        headers: {
+            "X-API-KEY": "secret-key-123"
+          }
+    });
+    return response.data;
+}
+
+async function getHealthEntries(userId: number) {
+    const response = await axios.get(`http://128.4.102.9:8000/users/${userId}/health-entries/`,{
+        headers: {
+            "X-API-KEY": "secret-key-123"
+          }
+    });
+    return response.data;
+}
 
 export class UserHomepageComponent extends EzComponent {
 
@@ -26,13 +63,66 @@ export class UserHomepageComponent extends EzComponent {
     @BindStyle("notifications", "display")
     public notifcationDisplay: string = "none"
 
+    @BindValue("patient-username")
+    private patientName: string = "";
+    @BindValueToNumber("patient-height")
+    private height: number = 0;
+    @BindValueToNumber("patient-weight")
+    private weight: number = 0;
+    @BindValue("patient-number")
+    private patientNumber: string = "";
+
+    private userID = 0;
+    private userInfo!: User;
+
     constructor() {
         super(html, css);
+    }
+
+    async setUserData() {
+        try {
+            this.userInfo = await getUser(this.userID);
+            this.initData();
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    }
+
+    async setHealthData() {
+        try {
+            const healthEntries = await getHealthEntries(this.userID);
+
+            for (const entry of healthEntries) {
+                const data:Health = entry;
+                const notifs: NotificationComponent = new NotificationComponent(data.date,data.entry_type,data.description,data.doctor_info);
+                if (data.entry_type =='appointment'){
+                    this.addComponent(notifs, "appointments");
+                }
+                else if(data.entry_type =="prescription"){
+                    this.addComponent(notifs,"perscription-reminders");
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
     }
 
     @Change("diagnosis-appended")
     onDiagnosisChange(event: ValueEvent) {
         this.newDiagnosis = event.value;
+    }
+
+    private initData(){
+        this.patientName = this.userInfo.username
+        this.height = this.userInfo.height;
+        this.weight = this.userInfo.weight;
+        this.patientNumber = this.userInfo.phone_number;
+    }
+
+    public setUserID(userID:number){
+        this.userID = userID;
+        this.setUserData();
+        this.setHealthData();
     }
 
     @Click("add-diagnoses")
