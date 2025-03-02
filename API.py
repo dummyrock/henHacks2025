@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 from fastapi.security import APIKeyHeader
-from fastapi import Depends, FastAPI, HTTPException, status, Security
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Depends, FastAPI, HTTPException, status, Security, Body
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import Column, Date, ForeignKey, Integer, String, create_engine
 from sqlalchemy.orm import Session, declarative_base, relationship, sessionmaker
@@ -61,6 +62,14 @@ Base = declarative_base()
 
 app = FastAPI(lifespan=lifespan,dependencies=[Security(api_key_auth)])
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080"],  # Add your origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 def send_text_email(to_number, carrier, message):
     email = os.getenv('ALERT_EMAIL')
     password = os.getenv('ALERT_PASSWORD')
@@ -110,6 +119,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
+    password = Column(String)
     email = Column(String) #in all forms of email
     phone_number = Column(String) # in (- - -) - - -  - - - -
     carrier = Column(String)
@@ -151,6 +161,7 @@ class HealthEntryResponse(HealthEntryCreate):
 
 class UserCreate(BaseModel):
     username: str
+    password: str
     email: EmailStr
     phone_number: str = Field(..., pattern=r"^\+?1?\d{9,15}$")  # Phone number validation
     carrier: str
@@ -221,5 +232,46 @@ def get_user_health_entries(user_id: int, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user.health_entries
+
+class UserCredentials(BaseModel):
+    username: str
+    password: str
+
+@app.post("/push-username-password/")
+def push_username_password(
+    credentials: UserCredentials = Body(...),  # Use request body
+    db: Session = Depends(get_db)
+):
+    # Check if user exists
+    db_user = db.query(User).filter(User.username == credentials.username).first()
+    
+    if db_user:
+        # User exists - return exists=true
+        return {"exists": True,"userID":db_user.id}
+    
+    # Create new user with empty fields
+    new_user = User(
+        username=credentials.username,
+        password=credentials.password,
+        email="",
+        phone_number="",
+        carrier="",
+        height=0,
+        weight=0
+    )
+    
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    
+    # User created - return exists=false
+    return {"exists": False, "userID":new_user.id}
+
+@app.get("/get-username-password/{user_id}", response_model=UserResponse)
+def get_username_password(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"username": user.username, "password": user.password}
 
 check_old_prescriptions()
