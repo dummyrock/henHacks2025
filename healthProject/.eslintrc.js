@@ -17,6 +17,7 @@ module.exports = {
     ],
     parserOptions: {
         project: ["./tsconfig.json"],
+        tsconfigRootDir: healthproject
     },
     ignorePatterns: [".eslintrc.js"],
     rules: {
