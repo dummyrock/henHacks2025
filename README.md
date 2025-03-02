@@ -94,3 +94,7 @@ class HealthEntry(BaseModel):
 | P1       | Doctor Network           | Mapbox, Elasticsearch |
 | P2       | AI Symptom Checker       | YOLOv12, WebRTC      |
 | P3       | Medicine Wiki            | GPT-4 API, RAG      |
+
+**TO MAKE THIS WORK** 
+We were only able to run this locally because we are on school wifi and cannot host it locally the wifi
+There has been no testing done with that.
