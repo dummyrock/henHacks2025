@@ -5,14 +5,19 @@
 	background-color: bisque;
 }
 
+#top-head{
+	padding-bottom: 4%
+}
+
 #welcome-banner{
-	background-color: rgb(195, 255, 230);
+	background-color:bisque;
+	color:rgb(14, 47, 23);
 	font-size: 40px;
 	text-align:center;
-	font-family:Verdana, Geneva, Tahoma, sans-serif;
+	font-family:lucidia handwriting;
 	border-radius: 20px;
-	text-shadow: 2px 2px grey;
 	font-style: italic;
+	
 }
 
 #enterButtons{
@@ -22,20 +27,24 @@
 #login{
 	font-family:'Courier New', Courier, monospace;
 	font-weight: bold;
-	border-radius: 100px;
+	border-radius: 30px;
 	font-size: 35px;
 	background-color: aquamarine;
 	border-color: black;
+	border-style:solid;
+	box-shadow: 0px 5px black;
 	padding: 20px;
 }
 
 #signUp{
 	font-family:'Courier New', Courier, monospace;
 	font-weight: bold;
-	border-radius: 100px;
+	border-radius: 30px;
 	font-size: 35px;
 	background-color: aquamarine;
 	border-color: black;
+	border-style:solid;
+	box-shadow: 0px 5px black;
 	padding: 20px;
 }
 
