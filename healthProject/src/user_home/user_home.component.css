@@ -3,6 +3,9 @@
     padding: 20px;
     font-size: 23px;
     background-color: rgb(163, 224, 255);
+    border-color: black;
+	border-style:solid;
+	box-shadow: 0px 5px black;
 }
 
 #provider-tab{
@@ -10,13 +13,19 @@
     padding: 20px;
     font-size: 23px;
     background-color: rgb(181, 252, 208);
+    border-color: black;
+	border-style:solid;
+	box-shadow: 0px 5px black;
 }
 
 #health-tab{
     border-radius: 20px;
     padding: 20px;
     font-size: 23px;
-    background-color:rgb(228, 189, 254)
+    background-color:rgb(228, 189, 254);
+    border-color: black;
+	border-style:solid;
+	box-shadow: 0px 5px black;
 }
 
 #notifications-tab{
@@ -24,9 +33,41 @@
     padding: 20px;
     font-size: 23px;
     background-color: rgb(255, 180, 180);
+    border-color: black;
+	border-style:solid;
+	box-shadow: 0px 5px black;
 }
 
 #tabs{
     padding: 20px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
+.fade-in-text {
+	animation: fadeIn 6s;
+  }
+
+  @keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+  }
+
+  @-moz-keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+  }
+  
+  @-webkit-keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+  }
+  
+  @-o-keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+  }
+  
+  @-ms-keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+  }

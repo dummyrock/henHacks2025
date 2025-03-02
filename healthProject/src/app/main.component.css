@@ -9,8 +9,37 @@
 	padding-bottom: 4%
 }
 
+.fade-in-text {
+	animation: fadeIn 6s;
+  }
+
+  @keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+  }
+
+  @-moz-keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+  }
+  
+  @-webkit-keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+  }
+  
+  @-o-keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+  }
+  
+  @-ms-keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+  }
+
 #welcome-banner{
-	background-color:bisque;
+
 	color:rgb(14, 47, 23);
 	font-size: 40px;
 	text-align:center;
