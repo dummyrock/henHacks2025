@@ -1,3 +1,49 @@
-<div>
-    hello
+<div id="tabs">
+<button class="tablink" id="patient-tab">Patient Information</button>
+<button class="tablink" id="provider-tab">Health Provider Information</button>
+<button class="tablink" id="health-tab">Perscription and Diagnoses</button>
+<button class="tablink" id="notifications-tab">Appointments and Notifications</button>
 </div>
+
+<div id="patientInfo" class="tabcontent">
+    <h3>Patient Name: <span id="patient-name"></span></h3>
+    <p>Username: <span id="patient-username"></span></p>
+    <p>Date of Birth: <span id="patient-dob"></span></p>
+    <p>Height: <span id="patient-height"></span></p>
+    <p>Weight: <span id="patient-weight"></span></p>
+    <p>Phone Number: <span id="patient-number"></span></p>
+  </div>
+
+
+  <div id="healthprovider-info" class="tabcontent">
+    <h3>Hospital: <span id="hospital-name"></span></h3>
+    <p>Primary Doctor: <span id="doctor-name"></span></p>
+    <p>Primary Doctor Number: <span id="docotor-number"></span></p>
+    <p>Health Insurance: <span id="health-insurance"></span></p>
+  </div>
+
+  <div id="perscription-diagnoses" class="tabcontent">
+    <h3>Rx Number: <span id="rx-number"></span></h3>
+
+    <p>Current Perscriptions: <span id="perscriptions"></span>
+    <div id="perscription-list"></div>
+    <input type="text" id="perscription-appended" name="perscirp" placeholder="Enter New Diagnoses">
+<button id="add-perscription">Add Perscription</button>
+    <p>Diagnoses: <span id="diagnoses-items"></span></p>
+    <div id="diagonis-list"></div>
+    <input type="text" id="diagnosis-appended" name="diagn" placeholder="Enter New Diagnoses">
+<button id="add-diagnoses">Add Diagnosis</button>
+<p>Symptoms: <span id="symptoms-items"></span></p>
+    <div id="symptoms-list"></div>
+    <input type="text" id="symptoms-appended" name="symptom" placeholder="Enter New Symptoms">
+<button id="add-symptoms">Add Symptoms</button>
+  </div>
+  
+  </div>
+
+  <div id="notifications" class="tabcontent">
+    <h3>Recent Notifications:</h3>
+    <p>Upcoming Appointments: <span id="appointments"></span></p>
+    <p>Perscription Reminders: <span id="perscription-reminders"></span></p>
+
+  </div>

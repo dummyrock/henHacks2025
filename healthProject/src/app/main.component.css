@@ -23,20 +23,20 @@
 	font-family:'Courier New', Courier, monospace;
 	font-weight: bold;
 	border-radius: 100px;
-	font-size: large;
+	font-size: 35px;
 	background-color: aquamarine;
 	border-color: black;
-	padding: 30px;
+	padding: 20px;
 }
 
 #signUp{
 	font-family:'Courier New', Courier, monospace;
 	font-weight: bold;
 	border-radius: 100px;
-	font-size: large;
+	font-size: 35px;
 	background-color: aquamarine;
 	border-color: black;
-	padding: 30px;
+	padding: 20px;
 }
 
 input[type=text], input[type=password] {
